@@ -26,14 +26,15 @@ if (IS_WIN && fs.existsSync(LOCAL_EXE)) {
   YT_DLP_BIN = LOCAL_EXE;
   YT_DLP_CMD = `"${LOCAL_EXE}"`;
 } else if (!IS_WIN && fs.existsSync(LOCAL_BIN)) {
-  // Linux: 폴더 내 바이너리
+  // Linux: curl로 받은 폴더 내 바이너리 (Render 빌드)
   YT_DLP_BIN = LOCAL_BIN;
   YT_DLP_CMD = `"${LOCAL_BIN}"`;
 } else {
-  // 시스템 PATH (pip install yt-dlp 등)
+  // 시스템 PATH 폴백
   YT_DLP_BIN = 'yt-dlp';
   YT_DLP_CMD = 'yt-dlp';
 }
+console.log(`[yt-dlp] 경로: ${YT_DLP_BIN} (platform: ${process.platform})`);
 
 function checkYtDlp() {
   return new Promise((resolve) => {
