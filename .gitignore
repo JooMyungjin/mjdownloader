@@ -1,0 +1,6 @@
+# Windows 전용 실행파일 — Render(Linux)에 올리지 않음
+yt-dlp.exe
+
+# 기타
+node_modules/
+.env

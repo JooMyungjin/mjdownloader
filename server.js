@@ -13,18 +13,24 @@ const { exec, spawn } = require('child_process');
 // Render는 PORT 환경변수를 주입함
 const PORT = process.env.PORT || 3000;
 
-// ─── yt-dlp 경로 (Windows .exe → Linux 바이너리 → 시스템 PATH 순) ───
+// ─── yt-dlp 경로 결정 ────────────────────────────────────
+// Windows: 폴더 내 yt-dlp.exe 우선
+// Linux(Render): pip 설치된 yt-dlp (시스템 PATH)
+const IS_WIN    = process.platform === 'win32';
 const LOCAL_EXE = path.join(__dirname, 'yt-dlp.exe');
 const LOCAL_BIN = path.join(__dirname, 'yt-dlp');
 
 let YT_DLP_BIN, YT_DLP_CMD;
-if (fs.existsSync(LOCAL_EXE)) {
+if (IS_WIN && fs.existsSync(LOCAL_EXE)) {
+  // Windows: 폴더 내 .exe
   YT_DLP_BIN = LOCAL_EXE;
   YT_DLP_CMD = `"${LOCAL_EXE}"`;
-} else if (fs.existsSync(LOCAL_BIN)) {
+} else if (!IS_WIN && fs.existsSync(LOCAL_BIN)) {
+  // Linux: 폴더 내 바이너리
   YT_DLP_BIN = LOCAL_BIN;
   YT_DLP_CMD = `"${LOCAL_BIN}"`;
 } else {
+  // 시스템 PATH (pip install yt-dlp 등)
   YT_DLP_BIN = 'yt-dlp';
   YT_DLP_CMD = 'yt-dlp';
 }
